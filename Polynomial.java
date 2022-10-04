@@ -70,7 +70,7 @@ public class Polynomial{
 		}
 		
 		int update_len=0;
-		for (int i=0;i<max; i++) {
+		for (int i=0;i<max+1; i++) {
 			if (new_coe[i]!=0) {
 				update_len=update_len+1;
 			}
@@ -85,6 +85,9 @@ public class Polynomial{
 			if(new_coe[j]!=0) {
 				update_coe[track]=new_coe[j];
 				update_exp[track]=new_exp[j];
+			}
+			else {
+				continue;
 			}
 		}
 		
