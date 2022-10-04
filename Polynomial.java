@@ -61,7 +61,7 @@ public class Polynomial{
 					coe_sum=coe_sum+this.Coefficient[j];
 				}
 			}
-			for (int h=0; h<max+1;h++) {
+			for (int h=0; h<len2;h++) {
 				if (P.Exponent[h]==i) {
 					coe_sum=coe_sum+P.Coefficient[h];
 				}
