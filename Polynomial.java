@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
+
 
 
 public class Polynomial{
@@ -85,6 +87,7 @@ public class Polynomial{
 			if(new_coe[j]!=0) {
 				update_coe[track]=new_coe[j];
 				update_exp[track]=new_exp[j];
+				track++;
 			}
 			else {
 				continue;
@@ -118,22 +121,60 @@ public class Polynomial{
 		
 	}
 	
-	public Polynomial multiply(Polynomial P) {
-		int double_length = P.Exponent.length;
-		int num_of_poly= this.Exponent.length;
-		Polynomial Accumulator=new Polynomial();
-		for (int i=0;i<num_of_poly;i++) {
-			double[] new_coe=new double[double_length]; 
-			double[] new_exp=new double[double_length];
-			for (int j=0;j<double_length;j++) {
-				new_coe[j]=this.Coefficient[i]*P.Coefficient[i];
-				new_exp[j]=this.Exponent[i]+this.Exponent[i];
+	public double getDegree(double [] exp){
+		
+		int len = exp.length;
+		int max = 0;
+
+		for(int i = 0; i < len; i++){
+			if(max <= exp[i]){
+				max = (int) exp[i];
 			}
-			Polynomial to_sum=new Polynomial(new_coe,new_exp);
-			Accumulator=Accumulator.add(to_sum);
-			
 		}
-		return Accumulator;
+		return max;
+	}
+	
+	public Polynomial multiply(Polynomial P) {
+		
+		int len1 = this.Exponent.length;
+		int len2 = P.Exponent.length;
+		
+		int max_degree=(int) (getDegree(this.Exponent)+getDegree(P.Exponent));
+		
+		double[] new_coe=new double[max_degree+1];
+		Arrays.fill(new_coe,0);
+		
+		for (int i = 0; i < len1; i++){
+			for(int j = 0; j < len2; j++){
+				
+				double coe_sum=this.Exponent[i] + P.Exponent[j];
+				double coe_pro=this.Coefficient[i] * P.Coefficient[j];
+		         new_coe[(int) coe_sum] = new_coe[(int) coe_sum] + coe_pro;
+			}
+		}
+
+		int update_len = 0;
+
+		for (int i = 0; i < max_degree + 1; i++){
+			if (new_coe[i] != 0){
+				update_len++;
+			}
+		}
+		
+		double [] update_coe = new double[update_len];
+		double [] update_exp = new double[update_len];
+		int j = 0;
+
+		for(int i = 0; i < max_degree + 1; i++){
+			if (new_coe[i] != 0){
+				update_coe[j] = new_coe[i];
+				update_exp[j] = i;
+				j++;
+			}
+		}
+		Polynomial R=new Polynomial(update_coe,update_exp);
+		
+		return R;
 	}
 	public Polynomial(File f) throws IOException {
 		
@@ -266,7 +307,7 @@ public class Polynomial{
 		}
 		
 		
-		PrintStream ps = new PrintStream("C:\\Users\\user\\myfile.txt");
+		PrintStream ps = new PrintStream("C:\\Users\\shizh\\myfile.txt");
 		ps.println(content);
 		ps.close();
 	}
